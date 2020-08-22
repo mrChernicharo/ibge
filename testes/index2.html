@@ -40,8 +40,7 @@
         event.preventDefault();
 
         if (tbody.childElementCount > 1) {
-
-          tbody.innerHTML = '';
+          tbody.innerHTML = "";
         }
 
         const name = event.target["name"].value;
@@ -64,12 +63,15 @@
               const td = document.createElement("td");
               const td2 = document.createElement("td");
 
-              td.textContent = item.periodo.replace('[', ' ').replace(',', '-').replace('[', ' ');
+              td.textContent = item.periodo
+                .replace("[", " ")
+                .replace(",", "-")
+                .replace("[", " ");
               td2.textContent = item.frequencia;
 
               tbody.appendChild(tr);
-              tr.appendChild(td)
-              tr.appendChild(td2)
+              tr.appendChild(td);
+              tr.appendChild(td2);
             });
           });
       }

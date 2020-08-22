@@ -4,24 +4,41 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>IBGE</title>
-  </head>
+    <link rel="stylesheet" href="style.css">
+	</head>
   <body>
-    <!-- HTML -->
-    <div id="container"></div>
+    <div id="container">
 
-    <!-- JS -->
-    <script>
-      const container = document.querySelector("#container");
-
-      const Http = new XMLHttpRequest();
-      const url = "https://jsonplaceholder.typicode.com/posts";
-      Http.open("GET", url);
-      Http.send();
-
-      Http.onreadystatechange = (e) => {
-        const requestOutput = JSON.parse(Http.responseText);
-				console.log(requestOutput)
-      };
-    </script>
+    <h1>Seja bem vindx ao Buscador de Nomes!</h1>
+    
+		
+    <form onsubmit="sendRequest(event)">
+      <label for="name">Nome</label>
+      <input name="name" type="text" />
+			
+      <select name="sex">
+        <option value="F">Feminino</option>
+        <option value="M">Masculino</option>
+      </select>
+			
+      <button type="submit">Procurar</button>
+    </form>
+    
+    <div id="name-head"></div>
+			<table>
+				<thead id="thead">
+					<!-- <th>Período</th>
+          <th>Quantidade</th> -->
+        </thead>
+        <tbody id="tbody"></tbody>
+        
+      </table>
+      
+      <div id="resposta"></div>
+      <div id="url"></div>
+      
+    </div>
   </body>
-</html>
+	<script src="./script.js"></script>
+	</html>
+	
