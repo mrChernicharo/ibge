@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IBGE</title>
+  </head>
+  <body>
+    <h1>Bem vinde ao Buscador de Nomes</h1>
+
+    <form onsubmit="sendRequest(event)">
+      <label for="name">Nome</label>
+      <input name="name" type="text" />
+
+      <select name="sex">
+        <option value="F">Feminino</option>
+        <option value="M">Masculino</option>
+      </select>
+
+      <button type="submit">Procurar</button>
+    </form>
+    <!-- HTML -->
+    <div id="container">
+      <table>
+        <thead>
+          <th>Período</th>
+          <th>Ferquência</th>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+
+    <!-- JS -->
+    <script>
+      const container = document.querySelector("#container");
+      const tbody = document.querySelector("#tbody");
+      // let nameInput = document.querySelector('#name-input').value;
+
+      function sendRequest(event) {
+        event.preventDefault();
+
+        if (tbody.childElementCount > 1) {
+
+          tbody.innerHTML = '';
+        }
+
+        const name = event.target["name"].value;
+        const sex = event.target["sex"].value;
+        const url = `https://servicodados.ibge.gov.br/api/v2/censos/nomes/${name}?sexo=${sex}`;
+        console.log(name);
+        console.log(sex);
+
+        fetch(url)
+          .then((data) => data.json())
+          .then((response) => {
+            // console.log(response[0].res);
+
+            const results = response[0].res.map((obj) => obj);
+
+            console.log(results);
+
+            results.map((item) => {
+              const tr = document.createElement("tr");
+              const td = document.createElement("td");
+              const td2 = document.createElement("td");
+
+              td.textContent = item.periodo.replace('[', ' ').replace(',', '-').replace('[', ' ');
+              td2.textContent = item.frequencia;
+
+              tbody.appendChild(tr);
+              tr.appendChild(td)
+              tr.appendChild(td2)
+            });
+          });
+      }
+    </script>
+  </body>
+</html>
