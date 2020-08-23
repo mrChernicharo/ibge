@@ -4,41 +4,40 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>IBGE</title>
-    <link rel="stylesheet" href="style.css">
-	</head>
+    <link rel="stylesheet" href="style.css" />
+  </head>
   <body>
     <div id="container">
+      <h1>Seja bem vindx ao Buscador de Nomes!</h1>
 
-    <h1>Seja bem vindx ao Buscador de Nomes!</h1>
-    
-		
-    <form onsubmit="sendRequest(event)">
-      <label for="name">Nome</label>
-      <input name="name" type="text" />
-			
-      <select name="sex">
-        <option value="F">Feminino</option>
-        <option value="M">Masculino</option>
-      </select>
-			
-      <button type="submit">Procurar</button>
-    </form>
-    
-    <div id="name-head"></div>
-			<table>
-				<thead id="thead">
-					<!-- <th>Período</th>
+      <form class="form" onsubmit="sendRequest(event)">
+        <label for="name">Nome</label>
+        <input name="name" type="text" />
+
+        <select name="sex">
+          <option value="F">Feminino</option>
+          <option value="M">Masculino</option>
+        </select>
+
+        <button id="submit" type="submit">Procurar</button>
+      </form>
+
+      <div id="loading-spinner"></div>
+
+      <div class="outcome">
+        <div id="name-head"></div>
+        <table>
+          <thead id="thead">
+            <!-- <th>Período</th>
           <th>Quantidade</th> -->
-        </thead>
-        <tbody id="tbody"></tbody>
-        
-      </table>
-      
-      <div id="resposta"></div>
-      <div id="url"></div>
-      
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+
+        <div id="resposta"></div>
+        <div id="url"></div>
+      </div>
     </div>
   </body>
-	<script src="./script.js"></script>
-	</html>
-	
+  <script src="./script.js"></script>
+</html>

@@ -1,78 +1,91 @@
+// const gif = require('./assets/spinner.svg')
 const container = document.querySelector("#container");
 const thead = document.querySelector("#thead");
 const tbody = document.querySelector("#tbody");
-const urlDiv = document.querySelector('#url');
-const respostaDiv = document.querySelector('#resposta');
-const nameDiv = document.querySelector('#name-head');
+const urlDiv = document.querySelector("#url");
+const respostaDiv = document.querySelector("#resposta");
+const nameDiv = document.querySelector("#name-head");
+const btn = document.querySelector("button#submit");
+// const spinner = document.querySelector("loading-spinner")
+
 // let nameInput = document.querySelector('#name-input').value;
 
 function sendRequest(event) {
-	event.preventDefault();
+  event.preventDefault();
 
-	if (tbody.childElementCount > 1) {
+  if (tbody.childElementCount > 1) {
+    tbody.innerHTML = "";
+    thead.innerHTML = "";
+    urlDiv.innerHTML = "";
+    respostaDiv.innerHTML = "";
+    nameDiv.innerHTML = "";
 
-		tbody.innerHTML = '';
-		thead.innerHTML = '';
-		urlDiv.innerHTML = '';
-		respostaDiv.innerHTML = '';
-		nameDiv.innerHTML = '';
-	}
+    // const loadingImg = document.createElement('img');
+    // spinner.appendChild(loadingImg);
+    // spinner.setAttribute('src', gif)
+  }
 
-	const name = event.target["name"].value;
-	const sex = event.target["sex"].value;
-	const url = `https://servicodados.ibge.gov.br/api/v2/censos/nomes/${name}?sexo=${sex}`;
-	console.log(name);
-	console.log(sex);
+  const name = event.target["name"].value;
+  const sex = event.target["sex"].value;
+  const url = `https://servicodados.ibge.gov.br/api/v2/censos/nomes/${name}?sexo=${sex}`;
+  console.log(name);
+  console.log(sex);
 
-	fetch(url)
-		.then((data) => data.json())
-		.then((response) => {
-			// console.log(response[0].res);
+  if (name.length <= 1) {
+    alert("nome tem que ter no mínimo duas letras");
+  }
 
-			const results = response[0].res.map((obj) => obj);
+  if (name.length > 2 && sex) {
+    btn.setAttribute("disabled", true);
+    fetch(url)
+      .then((data) => data.json())
+      .then((response) => {
+        btn.removeAttribute("disabled");
 
-			console.log(results);
-			const reduced = results.reduce((acc, current) => {
-				return acc += current.frequencia
-			}, 0);
-			
-			urlDiv.textContent = url;
+        const results = response[0].res.map((obj) => obj);
 
-			const th1 = document.createElement('th');
-			const th2 = document.createElement('th');
-			th1.textContent = 'Período'
-			th2.textContent = 'Quantidade'
+        console.log(results);
+        const reduced = results.reduce((acc, current) => {
+          return (acc += current.frequencia);
+        }, 0);
 
-			thead.appendChild(th1);
-			thead.appendChild(th2);
-			respostaDiv.textContent = `Há um total de ${reduced} ${name}${isPlural(name) ? '' : 's'} no Brasil.` 
-			nameDiv.textContent = name;
+        urlDiv.textContent = url;
 
-			results.map((item) => {
-				const tr = document.createElement("tr");
+        const th1 = document.createElement("th");
+        const th2 = document.createElement("th");
+        th1.textContent = "Período";
+        th2.textContent = "Quantidade";
 
-				const td1 = document.createElement("td");
-				const td2 = document.createElement("td");
+        thead.appendChild(th1);
+        thead.appendChild(th2);
+        respostaDiv.innerHTML = `Há um total de ${reduced} ${captalize(name)}${
+          isPlural(name) ? "" : "s"
+        } no Brasil.`;
+        nameDiv.textContent = captalize(name);
 
-				td1.textContent = item.periodo.replace('[', ' ').replace(',', '-').replace('[', ' ');
-				td2.textContent = item.frequencia;
+        results.map((item) => {
+          const tr = document.createElement("tr");
+          const td1 = document.createElement("td");
+          const td2 = document.createElement("td");
 
+          td1.textContent = item.periodo
+            .replace("[", " ")
+            .replace(",", "-")
+            .replace("[", " ");
+          td2.textContent = item.frequencia;
 
-				tbody.appendChild(tr);
-				tr.appendChild(td1);
-				tr.appendChild(td2);
+          tbody.appendChild(tr);
+          tr.appendChild(td1);
+          tr.appendChild(td2);
+        });
+      });
 
-
-
-
-				
-				
-			});
-		});
-
-		function isPlural (name) {
-			const nameArray = name.split('');
-			return nameArray[nameArray.length - 1] === 's'; 
-		}
-	}
-
+    function isPlural(name) {
+      const nameArray = name.split("");
+      return nameArray[nameArray.length - 1] === "s";
+    }
+    function captalize(name) {
+      return name.charAt(0).toUpperCase() + name.slice(1);
+    }
+  }
+}
